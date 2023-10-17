@@ -8,6 +8,7 @@ class SalonEntity {
   String image;
   String video;
   String map;
+  bool verified;
   SalonEntity({
     this.id = 0,
     this.ownerId = 0,
@@ -18,5 +19,6 @@ class SalonEntity {
     this.image = '',
     this.video = '',
     this.map = '',
+    this.verified = true,
   });
 }

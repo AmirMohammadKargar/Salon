@@ -21,6 +21,7 @@ SalonModel _$SalonModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$SalonModel {
   int get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'owner_id')
   int get ownerId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get phone => throw _privateConstructorUsedError;
@@ -29,6 +30,7 @@ mixin _$SalonModel {
   String get image => throw _privateConstructorUsedError;
   String get video => throw _privateConstructorUsedError;
   String get map => throw _privateConstructorUsedError;
+  bool get verified => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,14 +46,15 @@ abstract class $SalonModelCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      int ownerId,
+      @JsonKey(name: 'owner_id') int ownerId,
       String name,
       String phone,
       String address,
       String description,
       String image,
       String video,
-      String map});
+      String map,
+      bool verified});
 }
 
 /// @nodoc
@@ -76,6 +79,7 @@ class _$SalonModelCopyWithImpl<$Res, $Val extends SalonModel>
     Object? image = null,
     Object? video = null,
     Object? map = null,
+    Object? verified = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -114,6 +118,10 @@ class _$SalonModelCopyWithImpl<$Res, $Val extends SalonModel>
           ? _value.map
           : map // ignore: cast_nullable_to_non_nullable
               as String,
+      verified: null == verified
+          ? _value.verified
+          : verified // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -128,14 +136,15 @@ abstract class _$$_SalonModelCopyWith<$Res>
   @useResult
   $Res call(
       {int id,
-      int ownerId,
+      @JsonKey(name: 'owner_id') int ownerId,
       String name,
       String phone,
       String address,
       String description,
       String image,
       String video,
-      String map});
+      String map,
+      bool verified});
 }
 
 /// @nodoc
@@ -158,6 +167,7 @@ class __$$_SalonModelCopyWithImpl<$Res>
     Object? image = null,
     Object? video = null,
     Object? map = null,
+    Object? verified = null,
   }) {
     return _then(_$_SalonModel(
       id: null == id
@@ -196,6 +206,10 @@ class __$$_SalonModelCopyWithImpl<$Res>
           ? _value.map
           : map // ignore: cast_nullable_to_non_nullable
               as String,
+      verified: null == verified
+          ? _value.verified
+          : verified // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -205,14 +219,15 @@ class __$$_SalonModelCopyWithImpl<$Res>
 class _$_SalonModel extends _SalonModel {
   _$_SalonModel(
       {this.id = 0,
-      this.ownerId = 0,
+      @JsonKey(name: 'owner_id') this.ownerId = 0,
       this.name = '',
       this.phone = '',
       this.address = '',
       this.description = '',
       this.image = '',
       this.video = '',
-      this.map = ''})
+      this.map = '',
+      this.verified = true})
       : super._();
 
   factory _$_SalonModel.fromJson(Map<String, dynamic> json) =>
@@ -222,7 +237,7 @@ class _$_SalonModel extends _SalonModel {
   @JsonKey()
   final int id;
   @override
-  @JsonKey()
+  @JsonKey(name: 'owner_id')
   final int ownerId;
   @override
   @JsonKey()
@@ -245,10 +260,13 @@ class _$_SalonModel extends _SalonModel {
   @override
   @JsonKey()
   final String map;
+  @override
+  @JsonKey()
+  final bool verified;
 
   @override
   String toString() {
-    return 'SalonModel(id: $id, ownerId: $ownerId, name: $name, phone: $phone, address: $address, description: $description, image: $image, video: $video, map: $map)';
+    return 'SalonModel(id: $id, ownerId: $ownerId, name: $name, phone: $phone, address: $address, description: $description, image: $image, video: $video, map: $map, verified: $verified)';
   }
 
   @override
@@ -265,13 +283,15 @@ class _$_SalonModel extends _SalonModel {
                 other.description == description) &&
             (identical(other.image, image) || other.image == image) &&
             (identical(other.video, video) || other.video == video) &&
-            (identical(other.map, map) || other.map == map));
+            (identical(other.map, map) || other.map == map) &&
+            (identical(other.verified, verified) ||
+                other.verified == verified));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, ownerId, name, phone,
-      address, description, image, video, map);
+      address, description, image, video, map, verified);
 
   @JsonKey(ignore: true)
   @override
@@ -290,14 +310,15 @@ class _$_SalonModel extends _SalonModel {
 abstract class _SalonModel extends SalonModel {
   factory _SalonModel(
       {final int id,
-      final int ownerId,
+      @JsonKey(name: 'owner_id') final int ownerId,
       final String name,
       final String phone,
       final String address,
       final String description,
       final String image,
       final String video,
-      final String map}) = _$_SalonModel;
+      final String map,
+      final bool verified}) = _$_SalonModel;
   _SalonModel._() : super._();
 
   factory _SalonModel.fromJson(Map<String, dynamic> json) =
@@ -306,6 +327,7 @@ abstract class _SalonModel extends SalonModel {
   @override
   int get id;
   @override
+  @JsonKey(name: 'owner_id')
   int get ownerId;
   @override
   String get name;
@@ -321,6 +343,8 @@ abstract class _SalonModel extends SalonModel {
   String get video;
   @override
   String get map;
+  @override
+  bool get verified;
   @override
   @JsonKey(ignore: true)
   _$$_SalonModelCopyWith<_$_SalonModel> get copyWith =>

@@ -9,7 +9,7 @@ part of 'salon.model.dart';
 _$_SalonModel _$$_SalonModelFromJson(Map<String, dynamic> json) =>
     _$_SalonModel(
       id: json['id'] as int? ?? 0,
-      ownerId: json['ownerId'] as int? ?? 0,
+      ownerId: json['owner_id'] as int? ?? 0,
       name: json['name'] as String? ?? '',
       phone: json['phone'] as String? ?? '',
       address: json['address'] as String? ?? '',
@@ -17,12 +17,13 @@ _$_SalonModel _$$_SalonModelFromJson(Map<String, dynamic> json) =>
       image: json['image'] as String? ?? '',
       video: json['video'] as String? ?? '',
       map: json['map'] as String? ?? '',
+      verified: json['verified'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$_SalonModelToJson(_$_SalonModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'ownerId': instance.ownerId,
+      'owner_id': instance.ownerId,
       'name': instance.name,
       'phone': instance.phone,
       'address': instance.address,
@@ -30,4 +31,5 @@ Map<String, dynamic> _$$_SalonModelToJson(_$_SalonModel instance) =>
       'image': instance.image,
       'video': instance.video,
       'map': instance.map,
+      'verified': instance.verified,
     };

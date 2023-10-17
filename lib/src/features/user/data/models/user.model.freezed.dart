@@ -23,6 +23,7 @@ mixin _$UserModel {
   int get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
+  String get image => throw _privateConstructorUsedError;
   bool get isStoreOwner => throw _privateConstructorUsedError;
   String get firstName => throw _privateConstructorUsedError;
   String get lastName => throw _privateConstructorUsedError;
@@ -44,6 +45,7 @@ abstract class $UserModelCopyWith<$Res> {
       {int id,
       String email,
       String username,
+      String image,
       bool isStoreOwner,
       String firstName,
       String lastName,
@@ -67,6 +69,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? id = null,
     Object? email = null,
     Object? username = null,
+    Object? image = null,
     Object? isStoreOwner = null,
     Object? firstName = null,
     Object? lastName = null,
@@ -85,6 +88,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
       username: null == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      image: null == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
               as String,
       isStoreOwner: null == isStoreOwner
           ? _value.isStoreOwner
@@ -121,6 +128,7 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       {int id,
       String email,
       String username,
+      String image,
       bool isStoreOwner,
       String firstName,
       String lastName,
@@ -142,6 +150,7 @@ class __$$_UserModelCopyWithImpl<$Res>
     Object? id = null,
     Object? email = null,
     Object? username = null,
+    Object? image = null,
     Object? isStoreOwner = null,
     Object? firstName = null,
     Object? lastName = null,
@@ -160,6 +169,10 @@ class __$$_UserModelCopyWithImpl<$Res>
       username: null == username
           ? _value.username
           : username // ignore: cast_nullable_to_non_nullable
+              as String,
+      image: null == image
+          ? _value.image
+          : image // ignore: cast_nullable_to_non_nullable
               as String,
       isStoreOwner: null == isStoreOwner
           ? _value.isStoreOwner
@@ -192,6 +205,7 @@ class _$_UserModel extends _UserModel {
       {this.id = 0,
       this.email = '',
       this.username = '',
+      this.image = '',
       this.isStoreOwner = false,
       this.firstName = '',
       this.lastName = '',
@@ -213,6 +227,9 @@ class _$_UserModel extends _UserModel {
   final String username;
   @override
   @JsonKey()
+  final String image;
+  @override
+  @JsonKey()
   final bool isStoreOwner;
   @override
   @JsonKey()
@@ -229,7 +246,7 @@ class _$_UserModel extends _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, username: $username, isStoreOwner: $isStoreOwner, firstName: $firstName, lastName: $lastName, isAdmin: $isAdmin, isBarber: $isBarber)';
+    return 'UserModel(id: $id, email: $email, username: $username, image: $image, isStoreOwner: $isStoreOwner, firstName: $firstName, lastName: $lastName, isAdmin: $isAdmin, isBarber: $isBarber)';
   }
 
   @override
@@ -241,6 +258,7 @@ class _$_UserModel extends _UserModel {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.username, username) ||
                 other.username == username) &&
+            (identical(other.image, image) || other.image == image) &&
             (identical(other.isStoreOwner, isStoreOwner) ||
                 other.isStoreOwner == isStoreOwner) &&
             (identical(other.firstName, firstName) ||
@@ -254,7 +272,7 @@ class _$_UserModel extends _UserModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, email, username,
+  int get hashCode => Object.hash(runtimeType, id, email, username, image,
       isStoreOwner, firstName, lastName, isAdmin, isBarber);
 
   @JsonKey(ignore: true)
@@ -276,6 +294,7 @@ abstract class _UserModel extends UserModel {
       {final int id,
       final String email,
       final String username,
+      final String image,
       final bool isStoreOwner,
       final String firstName,
       final String lastName,
@@ -292,6 +311,8 @@ abstract class _UserModel extends UserModel {
   String get email;
   @override
   String get username;
+  @override
+  String get image;
   @override
   bool get isStoreOwner;
   @override

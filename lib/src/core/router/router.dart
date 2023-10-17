@@ -4,8 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:salon/src/core/router/routes.dart';
 import 'package:salon/src/features/auth/presentations/pages/login.screen.dart';
 import 'package:salon/src/features/auth/presentations/pages/signup.screen.dart';
+import 'package:salon/src/features/profile/presentations/pages/profile.screen.dart';
 import 'package:salon/src/features/salon/presentations/pages/salon.screen.dart';
 import 'package:salon/src/features/salon/presentations/pages/salons_list.screen.dart';
+import 'package:salon/src/features/services/presentations/pages/orders.screen.dart';
+import 'package:salon/src/features/user/presentation/pages/edit_user.screen.dart';
 
 import '../../features/splash/presentations/pages/splash.screen.dart';
 
@@ -64,6 +67,21 @@ class AppRouter {
         (state) => SalonScreen(
           id: int.parse(state.pathParameters['id']!),
         ),
+      ),
+      AppRoute(
+        Routes.profilePath,
+        Routes.profile,
+        (state) => const ProfileScreen(),
+      ),
+      AppRoute(
+        Routes.editUserPath,
+        Routes.editUser,
+        (state) => const EditUserScreen(),
+      ),
+      AppRoute(
+        Routes.ordersPath,
+        Routes.orders,
+        (state) => const OrdersScreen(),
       ),
     ],
   );

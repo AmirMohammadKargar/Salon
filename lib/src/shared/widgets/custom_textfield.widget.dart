@@ -8,15 +8,20 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.hint,
     this.secure = false,
+    this.onChange,
   }) : super(key: key);
   final TextEditingController? controller;
   final String? hint;
+  final Function? onChange;
   final bool secure;
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(Dimens.radiusX2),
       child: TextField(
+        onChanged: (value) {
+          onChange?.call(value);
+        },
         obscureText: secure,
         controller: controller,
         decoration: InputDecoration(

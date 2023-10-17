@@ -14,4 +14,11 @@ class Routes {
 
   static const profilePath = '/profile';
   static const profile = 'profile';
+
+  static const editUserPath = '/editUser';
+  static const editUser = 'editUser';
+
+
+  static const ordersPath = '/orders';
+  static const orders = 'orders';
 }

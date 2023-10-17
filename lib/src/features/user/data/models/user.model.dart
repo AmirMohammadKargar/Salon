@@ -14,6 +14,7 @@ class UserModel with _$UserModel {
     @Default(0) int id,
     @Default('') String email,
     @Default('') String username,
+    @Default('') String image,
     @Default(false) bool isStoreOwner,
     @Default('') String firstName,
     @Default('') String lastName,
@@ -27,8 +28,10 @@ class UserModel with _$UserModel {
   UserEntity get toEntity => UserEntity(
         id: id,
         username: username,
+        image: image,
         email: email,
         lastName: lastName,
+        firstName: firstName,
         isAdmin: isAdmin,
         isBarber: isBarber,
         isStoreOwner: isStoreOwner,

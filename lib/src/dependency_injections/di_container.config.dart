@@ -25,11 +25,18 @@ import '../features/salon/data/datasources/salon.remote_datasource.dart'
 import '../features/salon/data/repositories/salon.repository_impl.dart' as _i13;
 import '../features/salon/domain/repositories/salon.repository.dart' as _i12;
 import '../features/salon/domain/usecases/salons.usecases.dart' as _i14;
-import '../features/user/data/datasources/user.remote_datasource.dart' as _i15;
-import '../features/user/data/repositories/user.repository_impl.dart' as _i17;
-import '../features/user/domain/repositories/user.repository.dart' as _i16;
-import '../features/user/domain/usecases/user.usecases.dart' as _i18;
-import 'module.dart' as _i19;
+import '../features/services/data/datasources/services.remote_datasource.dart'
+    as _i15;
+import '../features/services/data/repositories/services.repository_impl.dart'
+    as _i17;
+import '../features/services/domain/repositories/services.repository.dart'
+    as _i16;
+import '../features/services/domain/usecases/services.usecases.dart' as _i18;
+import '../features/user/data/datasources/user.remote_datasource.dart' as _i19;
+import '../features/user/data/repositories/user.repository_impl.dart' as _i21;
+import '../features/user/domain/repositories/user.repository.dart' as _i20;
+import '../features/user/domain/usecases/user.usecases.dart' as _i22;
+import 'module.dart' as _i23;
 
 // ignore_for_file: unnecessary_lambdas
 // ignore_for_file: lines_longer_than_80_chars
@@ -65,13 +72,27 @@ _i1.GetIt $initGetIt(
       () => _i14.SalonUsecase(gh<_i12.SalonRepository>()));
   gh.factory<_i14.SalonsUsecase>(
       () => _i14.SalonsUsecase(gh<_i12.SalonRepository>()));
-  gh.factory<_i15.UserRemoteDatasource>(
-      () => _i15.UserRemoteDatasourceImpl(gh<_i3.AppHttpClient>()));
-  gh.factory<_i16.UserRepository>(
-      () => _i17.UserRepositoryImpl(gh<_i15.UserRemoteDatasource>()));
-  gh.factory<_i18.UserUsecase>(
-      () => _i18.UserUsecase(gh<_i16.UserRepository>()));
+  gh.factory<_i15.ServicesRemoteDataSource>(
+      () => _i15.ServicesRemoteDataSourceImpl(gh<_i3.AppHttpClient>()));
+  gh.factory<_i16.ServicesRepository>(
+      () => _i17.ServicesRepositoryImpl(gh<_i15.ServicesRemoteDataSource>()));
+  gh.factory<_i18.ServicesUsecase>(
+      () => _i18.ServicesUsecase(gh<_i16.ServicesRepository>()));
+  gh.factory<_i19.UserRemoteDatasource>(
+      () => _i19.UserRemoteDatasourceImpl(gh<_i3.AppHttpClient>()));
+  gh.factory<_i20.UserRepository>(
+      () => _i21.UserRepositoryImpl(gh<_i19.UserRemoteDatasource>()));
+  gh.factory<_i22.UserUsecase>(
+      () => _i22.UserUsecase(gh<_i20.UserRepository>()));
+  gh.factory<_i18.OrdersUsecase>(
+      () => _i18.OrdersUsecase(gh<_i16.ServicesRepository>()));
+  gh.factory<_i18.PlaceOrderUsecase>(
+      () => _i18.PlaceOrderUsecase(gh<_i16.ServicesRepository>()));
+  gh.factory<_i22.UpdateUserUsecase>(
+      () => _i22.UpdateUserUsecase(gh<_i20.UserRepository>()));
+  gh.factory<_i22.UploadUsecase>(
+      () => _i22.UploadUsecase(gh<_i20.UserRepository>()));
   return getIt;
 }
 
-class _$Modules extends _i19.Modules {}
+class _$Modules extends _i23.Modules {}

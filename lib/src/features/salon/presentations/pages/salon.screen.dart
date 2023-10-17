@@ -5,6 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:salon/src/core/theme/theme.dart';
 import 'package:salon/src/features/salon/presentations/managers/salon.manager.dart';
+import 'package:salon/src/features/salon/presentations/widgets/address_box.widget.dart';
+import 'package:salon/src/features/salon/presentations/widgets/map_button.widget.dart';
+import 'package:salon/src/features/salon/presentations/widgets/service_card.widget.dart';
+import 'package:salon/src/features/salon/presentations/widgets/show_reserve_time_bottom_sheet.widget.dart';
 import 'package:salon/src/shared/widgets/custom_button.widget.dart';
 
 import '../../../../../gen/assets.gen.dart';
@@ -37,75 +41,20 @@ class _SalonScreenState extends State<SalonScreen> {
     return ChangeNotifierProvider.value(
       value: salonManager,
       child: Scaffold(
-        bottomNavigationBar: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: Dimens.unitX4.w, vertical: Dimens.unitX4.h),
-          child: CustomButton(
-            text: 'رزو ساعت (۴۰,۰۰ تومان)',
-            onTap: () {
-              showModalBottomSheet(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(Dimens.radiusX6),
-                ),
-                context: context,
-                builder: (context) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: Dimens.unitX4.w, vertical: Dimens.unitX4.h),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'زمان های موجود برای رزو: ',
-                          style: CTheme.of(context).textTheme.bold16,
-                        ),
-                        SizedBox(
-                          height: Dimens.unitX8.h,
-                        ),
-                        Wrap(
-                          spacing: Dimens.unitX1.w,
-                          runSpacing: Dimens.unitX2.h,
-                          children: const [
-                            ReserveTimeBox(
-                              text: '13:00',
-                              type: ReserveTimeBoxType.open,
-                            ),
-                            ReserveTimeBox(
-                              text: '14:00',
-                              type: ReserveTimeBoxType.open,
-                            ),
-                            ReserveTimeBox(
-                              text: '15:00',
-                              type: ReserveTimeBoxType.reserved,
-                            ),
-                            ReserveTimeBox(
-                              text: '16:00',
-                              type: ReserveTimeBoxType.disable,
-                            ),
-                            ReserveTimeBox(
-                              text: '17:00',
-                              type: ReserveTimeBoxType.disable,
-                            ),
-                            ReserveTimeBox(
-                              text: '18:00',
-                              type: ReserveTimeBoxType.open,
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: Dimens.unitX8.h,
-                        ),
-                        const CustomButton(text: 'تایید'),
-                        SizedBox(
-                          height: Dimens.unitX8.h,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
+        bottomNavigationBar: Consumer<SalonManager>(
+          builder: (context, value, child) => Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: Dimens.unitX4.w, vertical: Dimens.unitX4.h),
+            child: CustomButton(
+              text: 'رزو وقت',
+              loading: value.placingOrder,
+              onTap: () async {
+                showReserveTimeBottomSheet(context, (date, reserved) {
+                  Navigator.pop(context);
+                  value.placeOrder(context, date, reserved);
+                });
+              },
+            ),
           ),
         ),
         body: SafeArea(
@@ -162,13 +111,22 @@ class _SalonScreenState extends State<SalonScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                value.salon!.name,
-                                style: CTheme.of(context).textTheme.bold20,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    value.salon!.name,
+                                    style: CTheme.of(context).textTheme.bold20,
+                                  ),
+                                  value.salon!.map != ''
+                                      ? MapButton(
+                                          map: value.salon!.map,
+                                        )
+                                      : const SizedBox.shrink(),
+                                ],
                               ),
-                              SizedBox(
-                                height: Dimens.unitX2.h,
-                              ),
+                              SizedBox(height: Dimens.unitX2.h),
                               ExpandableText(
                                 value.salon!.description,
                                 style: CTheme.of(context)
@@ -183,29 +141,88 @@ class _SalonScreenState extends State<SalonScreen> {
                                 expandText: 'بیشتر',
                                 collapseText: 'بستن',
                               ),
-                              SizedBox(height: Dimens.unitX8.h),
-                              Text(
-                                'سرویس های انتخاب شده:',
-                                style: CTheme.of(context).textTheme.medium16,
+                              SizedBox(height: Dimens.unitX2.h),
+                              const Divider(),
+                              SizedBox(height: Dimens.unitX2.h),
+                              AddressBox(
+                                address: value.salon!.address,
                               ),
-                              SizedBox(height: Dimens.unitX4.h),
-                              const ServiceCard(selecetd: true),
                               SizedBox(height: Dimens.unitX8.h),
-                              Text(
-                                'لطفا سرویس های مورد نظر خود را انتخاب نمایید :',
-                                style: CTheme.of(context).textTheme.medium16,
-                              ),
-                              SizedBox(height: Dimens.unitX4.h),
-                              ...List.generate(
-                                4,
-                                (index) => Padding(
-                                  padding:
-                                      EdgeInsets.only(bottom: Dimens.unitX4.h),
-                                  child: const ServiceCard(
-                                    selecetd: false,
-                                  ),
+                              Consumer<SalonManager>(
+                                builder: (context, value, child) =>
+                                    AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 300),
+                                  child: value.services.isEmpty
+                                      ? const SizedBox.shrink()
+                                      : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'لطفا سرویس های مورد نظر خود را انتخاب نمایید :',
+                                              style: CTheme.of(context)
+                                                  .textTheme
+                                                  .medium16,
+                                            ),
+                                            SizedBox(height: Dimens.unitX4.h),
+                                            ...List.generate(
+                                              value.services.length,
+                                              (index) => Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom: Dimens.unitX4.h),
+                                                child: ServiceCard(
+                                                  selecetd: false,
+                                                  service:
+                                                      value.services[index],
+                                                  onTap: (service) {
+                                                    value
+                                                        .selectService(service);
+                                                  },
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                 ),
-                              )
+                              ),
+                              SizedBox(height: Dimens.unitX8.h),
+                              Consumer<SalonManager>(
+                                builder: (context, value, child) =>
+                                    AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 300),
+                                  child: value.selectedServices.isEmpty
+                                      ? const SizedBox.shrink()
+                                      : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'سرویس های انتخاب شده:',
+                                              style: CTheme.of(context)
+                                                  .textTheme
+                                                  .medium16,
+                                            ),
+                                            SizedBox(height: Dimens.unitX4.h),
+                                            ...List.generate(
+                                              value.selectedServices.length,
+                                              (index) => Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom: Dimens.unitX4.h),
+                                                child: ServiceCard(
+                                                  selecetd: true,
+                                                  service: value
+                                                      .selectedServices[index],
+                                                  onTap: (service) {
+                                                    value
+                                                        .selectService(service);
+                                                  },
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                ),
+                              ),
                             ],
                           ),
                         )
@@ -214,113 +231,6 @@ class _SalonScreenState extends State<SalonScreen> {
                   ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-enum ReserveTimeBoxType {
-  disable,
-  reserved,
-  open;
-}
-
-class ReserveTimeBox extends StatelessWidget {
-  const ReserveTimeBox({
-    Key? key,
-    required this.type,
-    required this.text,
-  }) : super(key: key);
-  final ReserveTimeBoxType type;
-  final String text;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 80.w,
-      height: 35.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Dimens.radiusX1),
-        color: type == ReserveTimeBoxType.reserved
-            ? CTheme.of(context).theme.primary[10]
-            : type == ReserveTimeBoxType.open
-                ? Colors.transparent
-                : Colors.grey[300],
-        border: type == ReserveTimeBoxType.open
-            ? Border.all(color: CTheme.of(context).theme.primary[10]!)
-            : null,
-      ),
-      child: Center(
-        child: Text(
-          '13:00',
-          style: CTheme.of(context).textTheme.medium15.copyWith(
-                color: type == ReserveTimeBoxType.reserved
-                    ? Colors.white
-                    : type == ReserveTimeBoxType.open
-                        ? CTheme.of(context).theme.primary[10]
-                        : CTheme.of(context).theme.grays[90],
-              ),
-        ),
-      ),
-    );
-  }
-}
-
-class ServiceCard extends StatelessWidget {
-  const ServiceCard({
-    Key? key,
-    required this.selecetd,
-  }) : super(key: key);
-  final bool selecetd;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: Dimens.unitX13.h,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Dimens.radiusX3),
-        color: selecetd
-            ? CTheme.of(context).theme.primary[30]
-            : CTheme.of(context).theme.background,
-        border: selecetd
-            ? Border.all(color: CTheme.of(context).theme.primary[10]!)
-            : null,
-        boxShadow: [
-          BoxShadow(
-            color: CTheme.of(context).theme.primary[10]!.withOpacity(0.1),
-            blurRadius: 8,
-            spreadRadius: 4,
-          )
-        ],
-      ),
-      padding: EdgeInsets.symmetric(horizontal: Dimens.unitX2.w),
-      child: Row(
-        children: [
-          SizedBox(
-            width: Dimens.unitX5.h,
-            height: Dimens.unitX5.h,
-            child: Checkbox(
-              value: selecetd,
-              activeColor: CTheme.of(context).theme.primary[10],
-              onChanged: (value) {},
-            ),
-          ),
-          SizedBox(
-            width: Dimens.unitX2.w,
-          ),
-          Text(
-            'اصلاح ریش',
-            style: CTheme.of(context).textTheme.light14.copyWith(
-                  color: CTheme.of(context).theme.grays[70],
-                ),
-          ),
-          const Spacer(),
-          Text(
-            '۴۰,۰۰۰ تومان',
-            style: CTheme.of(context).textTheme.medium14.copyWith(
-                  color: CTheme.of(context).theme.grays[70],
-                ),
-          )
-        ],
       ),
     );
   }

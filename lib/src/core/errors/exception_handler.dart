@@ -3,10 +3,11 @@ import 'package:dartz/dartz.dart';
 import 'package:salon/src/core/errors/exceptions.dart';
 import 'package:salon/src/core/errors/failures.dart';
 
-Future<Either<Failure, T>> exceptionHandler<T>(Function usecase) async {
+Future<Either<Failure, T>> exceptionHandler<T>(Function usecase,
+    {bool needParse = true}) async {
   try {
     var res = await usecase();
-    return Right((res).toEntity);
+    return !needParse ? Right(res) : Right((res).toEntity);
   } on BadRequestException catch (e) {
     return Left(BadRequestFailure(e.message, e.request));
   } on BadGatewayException catch (e) {
@@ -23,6 +24,8 @@ Future<Either<Failure, T>> exceptionHandler<T>(Function usecase) async {
     return Left(AppFailure(e.message));
   } on NetworkException {
     return const Left(NetworkFailure());
+  } on AuthenticationException catch (e) {
+    return Left(AuthenticationFailure(e.message));
   } on Exception catch (e) {
     return Left(AppFailure(e.toString()));
   } catch (err) {

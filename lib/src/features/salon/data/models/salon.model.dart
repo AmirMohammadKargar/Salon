@@ -12,7 +12,7 @@ class SalonModel with _$SalonModel {
   SalonModel._();
   factory SalonModel({
     @Default(0) int id,
-    @Default(0) int ownerId,
+    @Default(0) @JsonKey(name: 'owner_id') int ownerId,
     @Default('') String name,
     @Default('') String phone,
     @Default('') String address,
@@ -20,6 +20,7 @@ class SalonModel with _$SalonModel {
     @Default('') String image,
     @Default('') String video,
     @Default('') String map,
+    @Default(true) bool verified,
   }) = _SalonModel;
 
   factory SalonModel.fromJson(Map<String, dynamic> json) =>
@@ -35,5 +36,6 @@ class SalonModel with _$SalonModel {
         image: image,
         video: video,
         map: map,
+        verified: verified,
       );
 }
